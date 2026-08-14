@@ -1,33 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import { CategoryTabs } from '../components/solutions/CategoryTabs';
 import { SearchBar } from '../components/solutions/SearchBar';
 import { PocGrid } from '../components/solutions/PocGrid';
-import { getPocs, getCategories } from '../api/pocsApi';
+import { getPocs } from '../api/pocsApi';
 
 export const SolutionsPage = () => {
-  const [categories, setCategories] = useState([]);
-  const [activeCategory, setActiveCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [pocs, setPocs] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getCategories().then(setCategories);
-  }, []);
-
-  useEffect(() => {
     setLoading(true);
     getPocs({
-      category_id: activeCategory,
       status: 'PUBLISHED',
       search: searchTerm
     }).then(data => {
       setPocs(data);
       setLoading(false);
     });
-  }, [activeCategory, searchTerm]);
+  }, [searchTerm]);
 
   return (
     <div className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-10">
@@ -51,13 +43,8 @@ export const SolutionsPage = () => {
         </p>
       </div>
 
-      {/* Filtering Toolbar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-slate-200">
-        <CategoryTabs
-          categories={categories}
-          activeCategory={activeCategory}
-          onSelectCategory={setActiveCategory}
-        />
+      {/* Search Toolbar */}
+      <div className="pb-6 border-b border-slate-200">
         <SearchBar
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
