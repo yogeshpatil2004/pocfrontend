@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Check } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check } from 'lucide-react';
 import { GlassCard } from '../components/ui/GlassCard';
+import { Button } from '../components/ui/Button';
 
 export const WhyUsPage = () => {
   const pillars = [
