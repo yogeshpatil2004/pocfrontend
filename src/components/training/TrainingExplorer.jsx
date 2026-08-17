@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { 
-  Folder, FileText, Video, Github, FileArchive, Image, 
+  Folder, FolderPlus, FilePlus, FileText, Video, Github, FileArchive, Image, 
   Download, Eye, ExternalLink, Plus, Trash2, ChevronRight, Upload, Link as LinkIcon, AlertTriangle
 } from 'lucide-react';
 import { GlassCard } from '../ui/GlassCard';
@@ -195,19 +195,19 @@ export const TrainingExplorer = ({ isAdmin = false }) => {
           <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={() => setShowFolderModal(true)}
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-bold rounded-xl bg-white border border-slate-300 text-slate-800 hover:border-primary-600 hover:text-primary-600 shadow-xs transition-all"
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-bold rounded-xl bg-white border border-slate-300 text-slate-800 hover:border-amber-500 hover:text-amber-600 shadow-xs transition-all cursor-pointer"
             >
-              <Plus className="w-4 h-4 text-primary-600" />
+              <FolderPlus className="w-4 h-4 text-amber-500" />
               <span>Create Folder</span>
             </button>
 
-            <Button
-              size="sm"
+            <button
               onClick={() => setShowFileModal(true)}
-              icon={Plus}
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-bold rounded-xl bg-primary-600 hover:bg-primary-700 text-slate-900 shadow-xs transition-all cursor-pointer"
             >
-              Add File
-            </Button>
+              <FilePlus className="w-4 h-4" />
+              <span>Add File</span>
+            </button>
           </div>
         )}
       </div>

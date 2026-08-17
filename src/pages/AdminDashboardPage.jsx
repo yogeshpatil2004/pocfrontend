@@ -68,8 +68,7 @@ export const AdminDashboardPage = () => {
     { id: 'overview', icon: LayoutDashboard, label: 'Overview' },
     { id: 'manage_pocs', icon: Layers, label: 'POCs' },
     { id: 'wizard', icon: PlusCircle, label: 'New POC' },
-    { id: 'manage_trainings', icon: Layers, label: 'Trainings' },
-    { id: 'wizard_training', icon: PlusCircle, label: 'New Training' },
+    { id: 'manage_trainings', icon: Layers, label: 'Training Materials' },
     { id: 'settings', icon: Settings, label: 'Settings' }
   ];
 
@@ -127,8 +126,8 @@ export const AdminDashboardPage = () => {
                 <Button onClick={() => setActiveTab('wizard')} icon={PlusCircle}>
                   Create New POC
                 </Button>
-                <Button variant="secondary" onClick={() => setActiveTab('wizard_training')} icon={PlusCircle}>
-                  Create Training Material
+                <Button variant="secondary" onClick={() => setActiveTab('manage_trainings')} icon={Layers}>
+                  Manage Training Materials
                 </Button>
               </div>
             </div>
@@ -137,10 +136,6 @@ export const AdminDashboardPage = () => {
 
         {activeTab === 'wizard' && (
           <AdminWizard initialPoc={selectedPoc} onFinish={() => { setActiveTab('manage_pocs'); fetchPocsAndAnalytics(); }} />
-        )}
-
-        {activeTab === 'wizard_training' && (
-          <AdminTrainingWizard initialTraining={selectedTraining} onFinish={() => { setActiveTab('manage_trainings'); fetchPocsAndAnalytics(); }} />
         )}
 
         {activeTab === 'manage_pocs' && (
