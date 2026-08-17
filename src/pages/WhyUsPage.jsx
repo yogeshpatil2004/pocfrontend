@@ -124,7 +124,7 @@ export const WhyUsPage = () => {
         </p>
         <div className="flex justify-center pt-2">
           <Link to="/solutions">
-            <Button size="lg" icon={ArrowRight}>
+            <Button variant="brick" size="lg" icon={ArrowRight}>
               Explore Solutions POCs
             </Button>
           </Link>
