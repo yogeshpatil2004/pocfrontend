@@ -1,25 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { SearchBar } from '../components/solutions/SearchBar';
-import { TrainingGrid } from '../components/training/TrainingGrid';
-import { getTrainings } from '../api/trainingApi';
+import React from 'react';
+import { TrainingExplorer } from '../components/training/TrainingExplorer';
 
 export const TrainingMaterialsPage = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  
-  const [trainings, setTrainings] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setLoading(true);
-    getTrainings({
-      status: 'PUBLISHED',
-      search: searchTerm || undefined,
-    }).then(data => {
-      setTrainings(data);
-      setLoading(false);
-    });
-  }, [searchTerm]);
-
   return (
     <div className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-10">
       
@@ -30,22 +12,12 @@ export const TrainingMaterialsPage = () => {
           Training Materials
         </h1>
         <p className="text-slate-500 font-sans text-base max-w-2xl">
-          Access comprehensive learning paths, documentation, and video tutorials for Vibodh AI enterprise solutions.
+          Browse and access internal learning paths, code repositories, documentation, and video tutorials.
         </p>
       </div>
 
-      {/* Filtering Toolbar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-slate-200">
-        <div className="flex flex-col md:flex-row gap-4 items-center">
-          <SearchBar
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-          />
-        </div>
-      </div>
-
-      {/* Grid List */}
-      <TrainingGrid trainings={trainings} loading={loading} />
+      {/* Nested Folder Explorer Component */}
+      <TrainingExplorer isAdmin={false} />
 
     </div>
   );

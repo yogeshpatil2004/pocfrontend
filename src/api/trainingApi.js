@@ -86,7 +86,61 @@ export const getDownloadsHistory = async (token) => {
     });
     return response.data || [];
   } catch (error) {
-    console.error("Error fetching download history:", error);
+    console.error("Error fetching downloads history:", error);
     return [];
+  }
+};
+
+export const getFolderContents = async (folderId = null) => {
+  try {
+    const params = folderId ? { folder_id: folderId } : {};
+    const response = await apiClient.get('/training/explorer/contents', { params });
+    return response.data || { breadcrumbs: [], folders: [], resources: [] };
+  } catch (error) {
+    console.error("Error fetching folder contents:", error);
+    return { breadcrumbs: [], folders: [], resources: [] };
+  }
+};
+
+export const createFolder = async (name, parentId = null) => {
+  try {
+    const response = await apiClient.post('/training/folders', {
+      name,
+      parent_id: parentId || null
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error creating folder:", error);
+    throw error;
+  }
+};
+
+export const deleteFolder = async (folderId) => {
+  try {
+    await apiClient.delete(`/training/folders/${folderId}`);
+    return true;
+  } catch (error) {
+    console.error(`Error deleting folder '${folderId}':`, error);
+    throw error;
+  }
+};
+
+export const createStandaloneResource = async (payload) => {
+  try {
+    const response = await apiClient.post('/training/resources', payload);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating resource:", error);
+    throw error;
+  }
+};
+
+export const deleteStandaloneResource = async (resourceId) => {
+  try {
+    await apiClient.delete(`/training/resources/${resourceId}`);
+    return true;
+  } catch (error) {
+    console.error(`Error deleting resource '${resourceId}':`, error);
+    throw error;
   }
 };

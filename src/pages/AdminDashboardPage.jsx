@@ -9,6 +9,7 @@ import { getPocs, deletePoc, restorePoc, getAnalytics } from '../api/pocsApi';
 import { getTrainings, deleteTraining } from '../api/trainingApi';
 import { AdminWizard } from '../components/admin/AdminWizard';
 import { AdminTrainingWizard } from '../components/admin/AdminTrainingWizard';
+import { TrainingExplorer } from '../components/training/TrainingExplorer';
 import { WebsiteSettingsEditor } from '../components/admin/WebsiteSettingsEditor';
 
 export const AdminDashboardPage = () => {
@@ -209,60 +210,7 @@ export const AdminDashboardPage = () => {
 
         {activeTab === 'manage_trainings' && (
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-6">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-4">
-              <h3 className="text-xl font-bold text-slate-900 font-headline">Training Repository ({trainings.length})</h3>
-              <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
-                <span className="text-slate-500 hidden sm:inline-block">Filter Status:</span>
-                {['ALL', 'PUBLISHED', 'DRAFT', 'ARCHIVED', 'DELETED'].map((st) => (
-                  <button
-                    key={st}
-                    onClick={() => setStatusFilter(st)}
-                    className={`px-3 py-1.5 rounded border text-[10px] transition-colors ${
-                      statusFilter === st ? 'bg-primary-600 text-white border-primary-600' : 'bg-white text-slate-500 border-slate-200 hover:border-slate-300'
-                    }`}
-                  >
-                    {st}
-                  </button>
-                ))}
-              </div>
-            </div>
-            {trainings.length === 0 ? (
-              <div className="text-center py-16 font-mono text-sm text-slate-500">
-                No Training Materials matching status filter. <br className="mb-2" />
-                <Button variant="secondary" size="sm" className="mt-4" onClick={() => setActiveTab('wizard_training')}>Create Training</Button>
-              </div>
-            ) : (
-              <div className="divide-y divide-slate-100">
-                {trainings.map((training) => {
-                  const isDeleted = training.status === 'DELETED';
-                  return (
-                    <div key={training.id} className={`py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 px-3 rounded transition-colors ${isDeleted ? 'bg-red-50 opacity-75' : 'hover:bg-slate-50'}`}>
-                      <div className="flex items-center gap-4">
-                        <div>
-                          <div className="font-headline font-bold text-base text-slate-900 flex items-center gap-2">
-                            <span>{training.title}</span>
-                          </div>
-                          <div className="flex items-center gap-3 font-mono text-[10px] text-slate-500 mt-1">
-                            <span>Cat: {training.category?.name || training.category_id}</span>
-                            <span>•</span>
-                            <span>{training.difficulty}</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <TechBadge label={training.status} variant={isDeleted ? 'accent' : 'default'} />
-                        <Button size="sm" variant="secondary" onClick={() => handleEditTraining(training)}>Edit</Button>
-                        {!isDeleted && (
-                          <button onClick={() => handleDeleteTraining(training.id)} className="p-2 rounded bg-red-50 hover:bg-red-100 border border-red-200 text-red-600 transition-colors" title="Soft Delete Training">
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+            <TrainingExplorer isAdmin={true} />
           </div>
         )}
 
