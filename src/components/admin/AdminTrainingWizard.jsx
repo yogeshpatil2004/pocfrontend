@@ -160,58 +160,115 @@ export const AdminTrainingWizard = ({ initialTraining = null, onFinish }) => {
         </GlassCard>
       )}
 
-      {/* STEP 2: Training Material */}
+      {/* STEP 2: Training Material & Folders */}
       {currentStep === 2 && (
         <GlassCard hoverEffect={false} className="max-w-4xl mx-auto space-y-6 border-primary-200">
-          <div className="flex justify-between items-center border-b border-slate-200 pb-3">
-            <h3 className="text-xl font-bold text-slate-900 font-headline">Step 2: Training Material</h3>
-            <Button size="sm" onClick={() => addArrayItem('resources', { resource_name: '', resource_type: 'PDF', resource_url: '' })}>Add Resource</Button>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 pb-3 gap-3">
+            <div>
+              <h3 className="text-xl font-bold text-slate-900 font-headline">Step 2: Training Folders & Resources</h3>
+              <p className="text-xs font-sans text-slate-500 mt-1">Organize files, links, videos, and documents into folders or modules.</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button size="sm" variant="secondary" onClick={() => addArrayItem('resources', { folder_name: 'New Folder', resource_name: '', resource_type: 'PDF', resource_url: '' })}>
+                + Add Folder / File
+              </Button>
+            </div>
           </div>
-          <p className="text-sm font-sans text-slate-500">Add PDF, PPT, DOC, Video, GitHub or any external link resources.</p>
+
           <div className="space-y-4">
-            {trainingData.resources.map((res, idx) => (
-              <div key={idx} className="p-4 bg-slate-50 border border-slate-200 rounded flex flex-col md:flex-row items-center gap-4">
-                <div className="flex-1 w-full md:w-auto">
-                  <input type="text" placeholder="Resource Name (e.g. Training Deck)" value={res.resource_name} onChange={e => updateArrayItem('resources', idx, 'resource_name', e.target.value)} className="w-full bg-white border border-slate-200 rounded px-3 py-2 text-slate-900 text-sm" />
-                </div>
-                <div className="w-full md:w-1/4 space-y-2">
-                  <select value={res.resource_type} onChange={e => updateArrayItem('resources', idx, 'resource_type', e.target.value)} className="w-full bg-white border border-slate-200 rounded px-3 py-2 text-slate-900 text-sm">
-                    {['PDF', 'PPT', 'DOC/DOCX', 'Video', 'GitHub Repository Link', 'YouTube Link', 'External Documentation Link', 'Other'].map(t => <option key={t} value={t}>{t}</option>)}
-                  </select>
-                </div>
-                <div className="flex-1 space-y-2">
-                  {['PDF', 'PPT', 'DOC/DOCX', 'Video', 'Other'].includes(res.resource_type) ? (
-                    <div className="flex items-center gap-2">
+            {trainingData.resources.length === 0 ? (
+              <div className="text-center py-8 border-2 border-dashed border-slate-200 rounded-xl text-slate-400 font-sans text-sm">
+                No resources added yet. Click "+ Add Folder / File" to add documents, links, or videos.
+              </div>
+            ) : (
+              trainingData.resources.map((res, idx) => (
+                <div key={idx} className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    {/* Folder / Module Name */}
+                    <div>
+                      <label className="block text-[11px] font-mono font-semibold text-slate-500 uppercase tracking-wider mb-1">
+                        📁 Folder / Module Name
+                      </label>
                       <input 
                         type="text" 
-                        placeholder="Uploaded File URL" 
-                        value={res.resource_url} 
-                        readOnly
-                        className="w-full bg-white border border-slate-200 rounded px-3 py-2 text-slate-900 text-sm opacity-70" 
+                        placeholder="e.g. Module 1: Architecture" 
+                        value={res.folder_name || ''} 
+                        onChange={e => updateArrayItem('resources', idx, 'folder_name', e.target.value)} 
+                        className="w-full bg-white border border-slate-200 rounded px-3 py-2 text-slate-900 text-sm focus:border-primary-600" 
                       />
-                      <label className="cursor-pointer bg-primary-600 hover:bg-primary-700 text-slate-900 px-3 py-2 rounded text-sm whitespace-nowrap transition-colors flex items-center gap-2">
-                        <Upload className="w-4 h-4" />
-                        {uploading ? 'Uploading...' : 'Upload File'}
-                        <input type="file" className="hidden" onChange={(e) => handleResourceUpload(e, idx)} disabled={uploading} />
-                      </label>
                     </div>
-                  ) : (
-                    <input type="text" placeholder="URL / Link" value={res.resource_url} onChange={e => updateArrayItem('resources', idx, 'resource_url', e.target.value)} className="w-full bg-white border border-slate-200 rounded px-3 py-2 text-slate-900 text-sm" />
-                  )}
+
+                    {/* Resource Name */}
+                    <div>
+                      <label className="block text-[11px] font-mono font-semibold text-slate-500 uppercase tracking-wider mb-1">
+                        📄 Resource Title
+                      </label>
+                      <input 
+                        type="text" 
+                        placeholder="e.g. Training Slide Deck" 
+                        value={res.resource_name} 
+                        onChange={e => updateArrayItem('resources', idx, 'resource_name', e.target.value)} 
+                        className="w-full bg-white border border-slate-200 rounded px-3 py-2 text-slate-900 text-sm focus:border-primary-600" 
+                      />
+                    </div>
+
+                    {/* Resource Type */}
+                    <div>
+                      <label className="block text-[11px] font-mono font-semibold text-slate-500 uppercase tracking-wider mb-1">
+                        📌 Type
+                      </label>
+                      <select 
+                        value={res.resource_type} 
+                        onChange={e => updateArrayItem('resources', idx, 'resource_type', e.target.value)} 
+                        className="w-full bg-white border border-slate-200 rounded px-3 py-2 text-slate-900 text-sm focus:border-primary-600"
+                      >
+                        {['PDF', 'PPT', 'DOC/DOCX', 'ZIP File', 'Video', 'GitHub Repository Link', 'YouTube Link', 'Google Drive Link', 'External Documentation Link', 'Other'].map(t => (
+                          <option key={t} value={t}>{t}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* URL or File Upload */}
+                  <div className="flex flex-col sm:flex-row items-center gap-3 pt-1">
+                    <div className="flex-1 w-full">
+                      {['PDF', 'PPT', 'DOC/DOCX', 'Video', 'ZIP File', 'Other'].includes(res.resource_type) ? (
+                        <div className="flex items-center gap-2">
+                          <input 
+                            type="text" 
+                            placeholder="Uploaded File URL" 
+                            value={res.resource_url} 
+                            readOnly
+                            className="w-full bg-white border border-slate-200 rounded px-3 py-2 text-slate-900 text-sm opacity-70" 
+                          />
+                          <label className="cursor-pointer bg-primary-600 hover:bg-primary-700 text-slate-900 px-3 py-2 rounded text-sm whitespace-nowrap transition-colors flex items-center gap-2 shrink-0">
+                            <Upload className="w-4 h-4" />
+                            {uploading ? 'Uploading...' : 'Upload File'}
+                            <input type="file" className="hidden" onChange={(e) => handleResourceUpload(e, idx)} disabled={uploading} />
+                          </label>
+                        </div>
+                      ) : (
+                        <input 
+                          type="text" 
+                          placeholder="Paste External Link / URL (https://...)" 
+                          value={res.resource_url} 
+                          onChange={e => updateArrayItem('resources', idx, 'resource_url', e.target.value)} 
+                          className="w-full bg-white border border-slate-200 rounded px-3 py-2 text-slate-900 text-sm focus:border-primary-600" 
+                        />
+                      )}
+                    </div>
+
+                    <button 
+                      onClick={() => removeArrayItem('resources', idx)} 
+                      className="text-red-500 hover:text-red-600 p-2 rounded bg-red-50 hover:bg-red-100 border border-red-200 transition-colors shrink-0 self-end sm:self-auto"
+                      title="Remove Item"
+                    >
+                      <Trash2 className="w-4 h-4"/>
+                    </button>
+                  </div>
                 </div>
-                
-                {/* Delete Button (moved out of absolute positioning) */}
-                <div className="w-full md:w-auto flex justify-end md:block">
-                  <button 
-                    onClick={() => removeArrayItem('resources', idx)} 
-                    className="text-red-400 hover:text-red-300 p-2.5 rounded bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 transition-colors"
-                    title="Remove Resource"
-                  >
-                    <Trash2 className="w-4 h-4"/>
-                  </button>
-                </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </GlassCard>
       )}
