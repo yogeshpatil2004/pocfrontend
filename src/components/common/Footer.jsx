@@ -19,13 +19,11 @@ export const Footer = () => {
           {/* Brand Col */}
           <div className="lg:col-span-6 space-y-4">
             <Link to="/" className="flex items-center gap-3.5 group">
-              <div className="w-10 h-10 rounded-lg bg-[#0B0F19] border border-slate-200 flex items-center justify-center p-1.5 shadow-sm transition-all group-hover:scale-105 group-hover:border-primary-200">
-                <img
-                  src="/logo.png"
-                  alt="Vibodh AI Logo"
-                  className="w-full h-full object-contain mix-blend-screen"
-                />
-              </div>
+              <img
+                src="/logo.png"
+                alt="Vibodh AI Logo"
+                className="h-10 w-auto object-contain transition-transform group-hover:scale-105"
+              />
               <div>
                 <span className="font-headline font-bold text-xl tracking-tight text-slate-900 group-hover:text-primary-600 transition-colors">
                   Vibodh <span className="text-primary-600">AI</span>
